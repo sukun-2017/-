@@ -1,0 +1,185 @@
+<admintpl file="header" />
+<css href="__PUBLIC__/install/css/own.css"/>
+<js href="__PUBLIC__/ueditor/ueditor.config.js"/>
+<js href="__PUBLIC__/ueditor/ueditor.all.js"/>
+<js href="__PUBLIC__/js/validate.js"/>
+<js href="__PUBLIC__/js/jquery.form.js"/>
+<js href="__PUBLIC__/js/common.js"/>
+<script type="text/html" id="photos-item-wrapper">
+    <li id="savedimage{id}">
+        <input id="photo-{id}" type="hidden" name="photos_url[]" value="{filepath}">
+        <input id="photo-{id}-name" type="text" name="photos_alt[]" value="{name}" style="width: 160px;" title="图片名称">
+        <img id="photo-{id}-preview" src="{url}" style="height:36px;width: 36px;" onclick="parent.image_preview_dialog(this.src);">
+        <a href="javascript:upload_one_image('图片上传','#photo-{id}');">替换</a>
+        <a href="javascript:(function(){$('#savedimage{id}').remove();})();">移除</a>
+    </li>
+</script>
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:U('Yuesao/show')}">月嫂列表</a></li>
+        <li class="active"><a href="{:U('Yuesao/add_yuesao')}" target="_self">添加月嫂</a></li>
+    </ul>
+    <form action="{:U('Yuesao/add_yuesao')}" method="post" class="ajax-form" enctype="multipart/form-data">
+        <div class="row-fluid">
+            <div class="span9">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>姓名：</th>
+                        <td>
+                            <input type="text" name="username">
+                            <span class="star">*</span>
+                        <th>证书：</th>
+                        <td>
+                            <select name="option">
+                                <option value="0">高级母婴护理师证</option>
+                                <option value="1">小儿推拿</option>
+                                <option value="2">营养师</option>
+                                <option value="3">产后康复师</option>
+                            </select>
+                        </td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>等级：</th>
+                        <td>
+                            <input type="text" name="level">
+                            <span class="star">*</span>
+                        </td>
+                        <th>技能：</th>
+                        <td>
+                            <input type="text" name="skill">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>年龄：</th>
+                        <td><input type="text" name="age"></td>
+                        <th>价格：</th>
+                        <td>
+                            <input type="text" name="price">
+                            <span class="star">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>经验：</th>
+                        <td>
+                            <input type="text" name="experience">
+                            <span class="star">*</span>
+                        </td>
+                        <th>爱好：</th>
+                        <td>
+                            <input type="text" name="hobby">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>照顾宝宝数量：</th>
+                        <td>
+                            <input type="text" name="baby_num">
+                        </td>
+                        <th>电话：</th>
+                        <td>
+                            <input type="text" name="phone">
+                            <span class="star">*</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>所在地：</th>
+                        <td>
+                            <input type="radio" name="address" value="杭州" checked>杭州
+                        </td>
+                        <th>是否推荐：</th>
+                        <td>
+                            <input type="radio" name="status" value="1">是
+                            <input type="radio" name="status" value="0" checked>否
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>头像：</th>
+                        <td colspan="3">
+                            <input type="file" name="avatar" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>简介：</th>
+                        <td colspan="3">
+                            <script id="container" name="content" type="text/plain"></script>
+                            <script type="text/javascript">
+                                var ue = UE.getEditor('container');
+                            </script>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>相册图集</th>
+                        <td colspan="3">
+                            <ul id="photos" class="pic-list unstyled" name="avatar"></ul>
+                            <a href="javascript:upload_multi_image('图片上传','#photos','photos-item-wrapper');" class="btn btn-small">选择图片</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="ajax-submit" type="button">提交</button>
+            <a class="btn" href="{:U('Yuesao/show')}">返回</a>
+        </div>
+    </form>
+</div>
+<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>
+<script>
+    $('.ajax-form').validate({
+        highlight : function(element,errorClass){
+            $(element).css('border','1px solid red');
+            $(element).parent().find('span').html('*').removeClass('succ');
+        },
+        unhighlight : function(element,errorClass){
+            $(element).css('border','1px solid #ccc');
+            $(element).parent().find('span').html('&nbsp;').addClass('succ');
+        },
+        rules:{
+            username:{
+                required:true,
+                minlength:2,
+                maxlength:10,
+//                remote:{
+//                    url:"{:U('Yuesao/checkUsername')}",
+//                    type:'POST',
+//                },
+            },
+            level:{
+                required:true,
+            },
+            skill:{
+                required:true,
+            },
+            age:{
+                required:true,
+            },
+            phone:{
+                required:true,
+            }
+        },
+        messages:{
+            username:{
+                required:'用户名不能为空！',
+                minlength:'用户名不能小于{0}位',
+                maxlength:'用户名不能大于{0}位',
+//                remote:'用户名被占用了（前台验证）',
+            },
+            level:{
+                required:'等级不得为空！',
+            },
+            skill:{
+                required:'内容不得为空！',
+            },
+            age:{
+                required:'内容不得为空！',
+            },
+            phone:{
+                required:'内容不得为空！',
+            }
+        }
+    })
+</script>

@@ -1,0 +1,188 @@
+<admintpl file="header" />
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:U('Order/all_order')}" target="_self">订单详情</a></li>
+    </ul>
+    <form method="post" class="ajax-form" action="{:U('Order/modify')}">
+        <input type="hidden" name="hidden" class="hidden" value="{$list.id}">
+        <div class="row-fluid">
+            <div class="span9">
+                <table class="table table-bordered">
+                    <tr>
+                        <th colspan="2">订单编号：{$date.time|default=time()|date='Ymd',###}</th>
+                    </tr>
+                    <tr>
+                        <th>顾客姓名：</th>
+                        <td>{$list.username}</td>
+                    </tr>
+                    <tr>
+                        <th>预约月嫂：</th>
+                        <td><span class="modify" data-name="yuesaoname">{$list.yuesaoname}</span></td>
+                    </tr>
+                    <if condition="$list['status'] eq 1">
+                        <tr>
+                            <th>订单状态：</th>
+                            <td>
+
+                                <if condition="$list['status'] eq 0">已取消订单
+                                    <elseif condition="$list['status'] eq 1" />未支付定金
+                                    <elseif condition="$list['status'] eq 2" />未付余款
+                                    <elseif condition="$list['status'] eq 3" />未评价
+                                    <else/>交易成功
+                                </if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>待付定金：</th>
+                            <td>{$list.deposit}</td>
+                        </tr>
+                        <tr>
+                            <th>待付余款：</th>
+                            <td>{$list.balance}</td>
+                        </tr>
+                        <elseif condition="$list['status'] eq 0" />
+                        <tr>
+                            <th>订单状态：</th>
+                            <td>
+
+                                <if condition="$list['status'] eq 0">已取消订单
+                                    <elseif condition="$list['status'] eq 1" />未支付定金
+                                    <elseif condition="$list['status'] eq 2" />未付余款
+                                    <elseif condition="$list['status'] eq 3" />未评价
+                                    <else/>交易成功
+                                </if>
+                            </td>
+                        </tr>
+                        <elseif condition="$list['status'] eq 2" />
+                        <tr>
+                            <th>订单状态：</th>
+                            <td>
+
+                                <if condition="$list['status'] eq 0">已取消订单
+                                    <elseif condition="$list['status'] eq 1" />未支付定金
+                                    <elseif condition="$list['status'] eq 2" />未付余款
+                                    <elseif condition="$list['status'] eq 3" />未评价
+                                    <else/>交易成功
+                                </if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>已付定金：</th>
+                            <td><span class="deposit">{$list.deposit}</span></td>
+                        </tr>
+                        <tr>
+                            <th>待付余款：</th>
+                            <td>{$list.balance}</td>
+                        </tr>
+                        <elseif condition="$list['status'] eq 3" />
+                        <tr>
+                            <th>订单状态：</th>
+                            <td>
+
+                                <if condition="$list['status'] eq 0">已取消订单
+                                    <elseif condition="$list['status'] eq 1" />未支付定金
+                                    <elseif condition="$list['status'] eq 2" />未付余款
+                                    <elseif condition="$list['status'] eq 3" />未评价
+                                    <else/>交易成功
+                                </if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>已付定金：</th>
+                            <td><span class="deposit">{$list.deposit}</span></td>
+                        </tr>
+                        <tr>
+                            <th>已付余款：</th>
+                            <td>{$list.balance}</td>
+                        </tr>
+                        <else/>
+                        <tr>
+                            <th>订单状态：</th>
+                            <td>
+
+                                <if condition="$list['status'] eq 0">已取消订单
+                                    <elseif condition="$list['status'] eq 1" />未支付定金
+                                    <elseif condition="$list['status'] eq 2" />未付余款
+                                    <elseif condition="$list['status'] eq 3" />未评价
+                                    <else/>交易成功
+                                </if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>已付定金：</th>
+                            <td>{$list.deposit}</td>
+                        </tr>
+                        <tr>
+                            <th>已付余款：</th>
+                            <td>{$list.balance}</td>
+                        </tr>
+                    </if>
+                    <tr>
+                        <th>下单时间：</th>
+                        <td>{$list.create_at|date='Y年m月d日 H:i:s',###}</td>
+                    </tr>
+                    <tr>
+                        <th>预产期：</th>
+                        <td>{$list.childbirth_date|date='Y年m月',###}</td>
+                    </tr>
+                    <tr>
+                        <th>服务时间：</th>
+                        <td><span class="modify" data-name="serve_time">{$list.serve_time|date='Y-m',###}</span></td>
+                    </tr>
+                    <tr>
+                        <th>顾客留言：</th>
+                        <td>{$list.leave_message}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="form-actions">
+            <a class="btn" href="javascript:history.back(-1)">返回</a>
+            <a class="btn" href="{:U('Order/delete_one',array('id'=>$list['id']))}" onclick="javascript:return confirm('确定要删除此条用户信息吗?')">删除</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+<script>
+    $(function(){
+        var flag = true;
+        $('.modify').click(function(){
+            var action_url = $('.ajax-form').attr('action');
+            var id = $('.hidden').val();
+            var deposit = $('.deposit').html();
+            var old_html_text = $(this).html();
+            var data_name = $(this).attr('data-name');
+            if(flag){
+                flag = false;
+                var input = "<input type='text' value='"+old_html_text+"'>";
+                $(this).html(input);
+                $(this).children('input').focus();
+                $(this).children('input').blur(function(){
+                    var new_html_text = $(this).val();
+                    if(old_html_text != new_html_text){
+                        $.ajax({
+                            url:action_url,
+                            dataType:'JSON',
+                            type:'post',
+                            data:{id:id,field_key:data_name,field_value:new_html_text,deposit:deposit},
+                            success:function(data){
+                            if(data.status > 0){
+                                alert(data.message);
+                                location.reload();
+                            }else{
+                                alert(data.message);
+                                location.reload();
+                            }
+                        }
+                    })
+                    }else{
+                        location.reload();
+                    }
+                })
+            }
+        })
+    })
+</script>

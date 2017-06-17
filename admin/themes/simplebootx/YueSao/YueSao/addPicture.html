@@ -1,0 +1,43 @@
+<admintpl file="header" />
+<js href="__PUBLIC__/ueditor/ueditor.config.js"/>
+<js href="__PUBLIC__/ueditor/ueditor.all.js"/>
+<js href="__PUBLIC__/js/validate.js"/>
+<js href="__PUBLIC__/js/jquery.form.js"/>
+<js href="__PUBLIC__/js/common.js"/>
+<script type="text/html" id="photos-item-wrapper">
+    <li id="savedimage{id}">
+        <input id="photo-{id}" type="hidden" name="photos_url[]" value="{filepath}">
+        <input id="photo-{id}-name" type="text" name="photos_alt[]" value="{name}" style="width: 160px;" title="图片名称">
+        <img id="photo-{id}-preview" src="{url}" style="height:36px;width: 36px;" onclick="parent.image_preview_dialog(this.src);">
+        <a href="javascript:upload_one_image('图片上传','#photo-{id}');">替换</a>
+        <a href="javascript:(function(){$('#savedimage{id}').remove();})();">移除</a>
+    </li>
+</script>
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:U('Yuesao/show')}">上传照片</a></li>
+    </ul>
+    <form action="{:U('Yuesao/addPicture')}" method="post" class="ajax-form" enctype="multipart/form-data">
+        <input type="hidden" name="yuesao_id" value="{$list.id}">
+        <div class="row-fluid">
+            <table>
+                <tr>
+                    <th>相册图集：</th>
+                    <td colspan="3">
+                        <ul id="photos" class="pic-list unstyled" name="avatar"></ul>
+                        <a href="javascript:upload_multi_image('图片上传','#photos','photos-item-wrapper');" class="btn btn-small">选择图片</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="form-actions">
+            <button class="ajax-submit" type="button">上传</button>
+            <a class="btn" href="{:U('Yuesao/show')}">返回</a>
+        </div>
+    </form>
+    <script src="__PUBLIC__/js/common.js"></script>
+</div>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<admintpl file="header" />
+<css href="__PUBLIC__/install/css/own.css"/>
+<js href="__PUBLIC__/ueditor/ueditor.config.js"/>
+<js href="__PUBLIC__/ueditor/ueditor.all.js"/>
+<js href="__PUBLIC__/js/validate.js"/>
+<js href="__PUBLIC__/js/jquery.form.js"/>
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a>修改</a></li>
+    </ul>
+    <form method="post" name="form" class="ajax-form" action="{:U('Yuesao/edit')}" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="{$cat.id}">
+        <div class="row-fluid">
+            <div class="span9">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>姓名：</th>
+                        <td>
+                            <input type="text" name="username" value="{$cat.name}">
+                        <th>证书：</th>
+                        <td>
+                            <select name="option">
+                                <option value="0" <if condition="$cat['certificate'] eq 0">selected<else/></if> >高级母婴护理师证</option>
+                                <option value="1" <if condition="$cat['certificate'] eq 1">selected<else/></if> >小儿推拿</option>
+                                <option value="2" <if condition="$cat['certificate'] eq 2">selected<else/></if> >营养师</option>
+                                <option value="3" <if condition="$cat['certificate'] eq 3">selected<else/></if> >产后康复师</option>
+                            </select>
+                        </td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>等级：</th>
+                        <td>
+                            <input type="text" name="level" value="{$cat.level}">
+                        </td>
+                        <th>技能：</th>
+                        <td>
+                            <input type="text" name="skill" value="{$cat.skill}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>年龄：</th>
+                        <td><input type="text" name="age" value="{$cat.age}"></td>
+                        <th>价格：</th>
+                        <td>
+                            <input type="text" name="price" value="{$cat.price}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>经验：</th>
+                        <td><input type="text" name="experience" value="{$cat.experience}"></td>
+                        <th>爱好：</th>
+                        <td>
+                            <input type="text" name="hobby" value="{$cat.hobby}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>照顾宝宝数量：</th>
+                        <td>
+                            <input type="text" name="baby_num" value="{$cat.baby_num}">
+                        </td>
+                        <th>电话：</th>
+                        <td>
+                            <input type="text" name="phone" value="{$cat.phone}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>所在地：</th>
+                        <td>
+                            <input type="radio" name="address" value="杭州" checked>杭州
+                        </td>
+                        <th>是否推荐：</th>
+                        <td>
+                            <input type="radio" value="1" name="status" <if condition="$cat.status eq 1">checked<else/></if>>是
+                            <input type="radio" value="0" name="status" <if condition="$cat.status eq 0">checked<else/></if>>否
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>头像：</th>
+                        <td colspan="3">
+                            <input type="file" name="avatar" ><img src="{$cat.thumb_picture}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>简介：</th>
+                        <td colspan="3">
+                            <script id="container" name="content" type="text/plain">{$cat.introduce}</script>
+                            <script type="text/javascript">
+                                var ue = UE.getEditor('container');
+                            </script>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>添加图片</th>
+                        <td>
+                            点击选择图片：<input type="file" class="file" name="picture[]" multiple="multiple">{$cat.avatar}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="form-actions">
+            <input type="button" class="ajax-submit" value="确认修改">
+            <a class="btn" href="javascript:history.back(-1);">返回</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+<script>
+    $('.ajax-form').validate({
+        rules:{
+            username:{
+                required:true,
+                minlength:2,
+                maxlength:10,
+            },
+            level:{
+                required:true,
+            },
+            skill:{
+                required:true,
+            },
+            age:{
+                required:true,
+            },
+            phone:{
+                required:true,
+            }
+        },
+        messages:{
+            username:{
+                required:'用户名不能为空！',
+                minlength:'用户名不能小于{0}位',
+                maxlength:'用户名不能大于{0}位',
+            },
+            level:{
+                required:'等级不得为空！',
+            },
+            skill:{
+                required:'内容不得为空！',
+            },
+            age:{
+                required:'内容不得为空！',
+            },
+            phone:{
+                required:'内容不得为空！',
+            }
+        }
+    }),
+
+    $("#option option:selected").val();  /*获取select被选中的值*/
+    $(".controls input:checked").val();  /*获取radio被选中的值*/
+</script>

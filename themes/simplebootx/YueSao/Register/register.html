@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>新用户注册</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="__PUBLIC__/assets/css/bootstrap.css" rel="stylesheet"/>
+<link href="__PUBLIC__/assets/css/register.css" rel="stylesheet"/>
+<link href="__PUBLIC__/assets/css/base.css" rel="stylesheet"/>
+<script src="__PUBLIC__/assets/js/lib/jquery/jquery.min.js"></script>
+<script src="__PUBLIC__/assets/js/login/mobilelog.js"></script>
+<style>
+@media (min-width: 1200px) {
+.container {
+	width: 1200px;
+}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <div class="log_content1">
+    <div class="col-md-8"> <span class="pull-left log_content1_left">欢迎来到世纪母婴！</span> </div>
+  </div>
+</div>
+<div class="log_content2">
+  <div class="container">
+    <div class="col-md-3 pull-left"> <img src="__PUBLIC__/assets/img/logo2.png" width="279px" height="69px" class="log_content2_img"> </div>
+    <div class="pull-right col-md-9">
+      <ul class="log_content2_nav">
+        <li style="border:none;width:12%;text-align: right;"><a href="{:U('Index/contact')}">联系我们</a></li>
+        <li><a href="{:U('Index/about')}">关于我们</a></li>
+        <li><a href="{:U('Index/matching')}">智能匹配月嫂</a></li>
+        <li><a href="{:U('Index/yuesao_show')}">月嫂展示&预约</a></li>
+        <li style="width: 12%;" class="active"><a href="{:U('Index/index')}">首页</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="log_bgcolor">
+	<div class="container">
+		<div class="log_in clearfix">
+			<img src="__PUBLIC__/assets/img/login/1.png" class="pull-left">
+			<div class="pull-right">
+				<div class="f">
+					<div class="f__hd log_in_title clearfix">
+						<h3 style="padding-left:50px;font-size:20px;color:#000；">新用户注册</h3>
+					</div>
+					<div class="f___bd">
+<!--新注册用户-->
+						<div class="f__tab clearfix">
+	        				<form action="javascript:;" method="POST" class="register">
+								<div class="col-3">
+									<input name="newnumber" type="text" placeholder="手机号码" class="phonenumber effect-8"/>
+									<span class="focus-border">
+										<i></i>
+									</span>
+								</div>
+								<div class="col-5">
+									<input name="usercode" type="password" placeholder="密码" class="usercode effect-8" style="width:100%;"/>
+									<span class="focus-border">
+										<i></i>
+									</span>
+								</div>
+								<div class="col-4">
+									<input name="code" type="password" placeholder="动态密码" class="code effect-8"/>
+									<span class="focus-border">
+										<i></i>
+									</span>
+								</div>
+								<div class="get_code">获取手机动态密码</div>
+
+								<div class="fc_reg clearfix">
+									<input type="checkbox" class="agree"/>
+									<p class="agree_word">同意并阅读<a href="{:U('Index/agreement')}">《用户服务使用协议》</a></p>
+								</div>
+								<a class="skip_log pull-right" href="{:U('Login/login')}">已有账号？　登录＞＞</a>
+								<button disabled id="btnRegister">注册</button>
+	        				</form>
+		        			
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div> 
+</div>
+
+  
+<div class="foot" style="border-top:1px solid transparent">
+  	<div class="container">
+		<tc_include file="Public:footer"/>
+	</div>
+</div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+	$(function(){
+        $('.get_code').click(function(){
+            var phone = $('.phonenumber').val();
+            $.ajax({
+                url:"{:U('Index/register')}",
+                dataType:'JSON',
+                type:'post',
+                data:{phone:phone},
+				success:function(data){
+                    if(data.status == 0){
+                        alert(data.message);
+                        return;
+					}
+				}
+            })
+		});
+		$('#btnRegister').click(function(){
+            var phone = $('.phonenumber').val();
+            var password = $('.usercode').val();
+            var code = $('.code').val();
+            $.ajax({
+                url:"{:U('Index/doregister')}",
+				dataType:'JSON',
+				type:'post',
+				data:{phone:phone,password:password,code:code},
+				success:function(data){
+                    if(data.status > 0){
+                        alert(data.message);
+                        location.href = data.url;
+					}else{
+                        alert(data.message);
+                        return;
+					}
+				}
+			})
+		})
+	})
+
+</script>

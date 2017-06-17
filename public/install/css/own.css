@@ -1,0 +1,11 @@
+.error {
+    color:red;
+}
+.ajax-form span.star {
+    color:red !important;
+}
+.ajax-form span.succ {
+    width: 28px;
+    display:inline-block;
+    background: url(../../images/timg.jpg) no-repeat bottom;
+}

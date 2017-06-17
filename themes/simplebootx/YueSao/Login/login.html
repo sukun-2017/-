@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>手机动态密码登录</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="__PUBLIC__/assets/css/bootstrap.css" rel="stylesheet"/>
+<link href="__PUBLIC__/assets/css/mobilelog.css" rel="stylesheet"/>
+<script src="__PUBLIC__/assets/js/lib/jquery/jquery.min.js"></script>
+<script src="__PUBLIC__/assets/js/login/mobilelog.js"></script>
+<script src="__PUBLIC__/assets/js/site/index/index.js"></script>
+<style>
+@media (min-width: 1200px) {
+.container {
+	width: 1200px;
+}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <div class="log_content1">
+    <div class="col-md-8"> <span class="pull-left log_content1_left">欢迎来到世纪母婴！</span> </div>
+    <!--<qqconnectlass="col-md-4">-->
+      <!--<qqconnectlass="nav pull-right log_content1_right"> <span>欢迎，我和我的猫</span> <a href="#">　|　个人中心　|　</a> <a href="#">退出登录</a> </div>-->
+    <!--</div>-->
+  </div>
+</div>
+<div class="log_content2">
+  <div class="container">
+    <div class="col-md-3 pull-left"> <img src="__PUBLIC__/assets/img/logo2.png" width="279px" height="69px" class="log_content2_img"> </div>
+    <div class="pull-right col-md-9">
+      <ul class="log_content2_nav">
+        <li style="border:none;width:12%;text-align: right;"><a href="{:U('Index/contact')}">联系我们</a></li>
+        <li><a href="{:U('Index/about')}">关于我们</a></li>
+        <li><a href="{:U('Index/matching')}">智能匹配月嫂</a></li>
+        <li><a href="{:U('Index/yuesao_show')}">月嫂展示&预约</a></li>
+        <li style="width: 12%;" class="active"><a href="{:U('Index/index')}">首页</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="log_bgcolor">
+	<div class="container">
+		<div class="log_in clearfix">
+			<img src="__PUBLIC__/assets/img/login/1.png" class="pull-left">
+			<div class="pull-right">
+<!--
+				<qqconnectlass="log_in_title clearfix">
+					
+				</div>
+-->         <form type="post" class="acount_login_form" name="myForm">
+				<div class="f">
+					<div class="f__hd log_in_title clearfix">
+						<a class="rborder log_in_title_on"><span>账号登录</span></a>
+						<a class="active log_in_title_on"><span>手机动态密码登录</span></a>
+					</div>
+					<div class="f___bd">
+                        <!--账号登录-->
+						<div class="f__tab">
+		        			<div class="col-3">
+								<input type="text" name="username" placeholder="用户名" class="phonenumber username effect-8"/>
+								<span class="focus-border">
+									<i></i>
+								</span>
+							</div>
+							<div class="col-5">
+								<input type="password" name="usercode" placeholder="密码" class="usercode effect-8" style="width:100%;"/>
+								<span class="focus-border">
+									<i></i>
+								</span>
+							</div>
+							<div class="fc_reg clearfix">
+								<a class="pull-left" href="{:U('Login/findcode')}">忘记密码？</a>
+								<a class="pull-right" href="{:U('Index/register')}">新用户注册</a>
+							</div>
+
+							<button class="acount_login" type="button">登录</button>
+						</div>
+
+						<!--手机动态密码登录-->
+						<div class="f__tab active">
+		        			<div class="col-3">
+								<input name="phonenumber" placeholder="手机号码" class="phonenumber phone effect-8"/>
+								<span class="focus-border">
+									<i></i>
+								</span>
+							</div>
+							<div class="col-4">
+								<input name="code" placeholder="动态密码" class="code effect-8"/>
+								<span class="focus-border">
+									<i></i>
+								</span>
+							</div>
+							<div class="get_code">获取手机动态密码</div>
+							<div class="fc_reg clearfix">
+								<a class="pull-left" href="{:U('Login/findcode')}">忘记密码？</a>
+								<a class="pull-right" href="{:U('Register/register')}">新用户注册</a>
+							</div>
+							<button id="btnLogin" type="button">登录</button>
+						</div>
+
+					</div>
+					<div style="padding:20px 0 0 50px;">
+						<a href="#" onclick="toLogin()"><img src="__PUBLIC__/images/qq_log.png" onclick=""></a>
+					</div>
+				</div>
+			</form>
+			</div>
+		</div>
+	</div> 
+</div>
+<div class="foot" style="border-top:1px solid transparent">
+  	<div class="container">
+		<tc_include file="Public:footer"/>
+	</div>
+</div>
+</div>
+</body>
+</html>
+<script>
+
+    function toLogin()
+    {
+        //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
+        //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
+        var A=window.open("oauth/index.php","TencentLogin",
+            "width=450,height=320,menubar=0,scrollbars=1,resizable=1,status=1,titlebar=0,toolbar=0,location=1");
+    }
+
+
+	$(function(){
+
+            $('.acount_login').click(function(){
+                var username = $('.username').val();
+                var password = $('.usercode').val();
+                $.ajax({
+                    type:'post',
+                    url:"{:U('User/login')}",
+                    dataType:'JSON',
+                    data:{username:username,password:password},
+                    success:function(data){
+                        if(data.status > 0){
+                            alert(data.message);
+                            location.href = data.url;
+                        }else{
+                            alert(data.message);
+                            return;
+                        }
+                    }
+                })
+            });
+
+        $('.get_code').click(function(){
+            var phone = $('.phone').val();
+            $.ajax({
+                url:"{:U('Login/get_code')}",
+                dataType:'JSON',
+                type:'post',
+                data:{phone:phone},
+                success:function(data){
+                    if(data.status == 0){
+                        alert(data.message);
+                        return;
+                    }
+                }
+            })
+        });
+
+            $('#btnLogin').click(function(){
+                var phone = $('.phone').val();
+                var code = $('.code').val();
+                $.ajax({
+                    type:'post',
+                    url:"{:U('Login/doLogin')}",
+                    dataType:'JSON',
+                    data:{phone:phone,code:code},
+                    success:function(data){
+                        if(data.status > 0){
+                            alert(data.message);
+                            location.href = data.url;
+                        }else{
+                            alert(data.message);
+                            return;
+                        }
+                    }
+                })
+            });
+
+	})
+</script>

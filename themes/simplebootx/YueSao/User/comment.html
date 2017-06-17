@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link href="__PUBLIC__/assets/css/lib/mdl/material.min.css" rel="stylesheet"/>
+    <script src="__PUBLIC__/assets/js/lib/mdl/material.min.js"></script>
+    <link href="__PUBLIC__/assets/css/site/header.css" rel="stylesheet"/>
+    <link href="__PUBLIC__/assets/css/site/footer.css" rel="stylesheet"/>
+    <link href="__PUBLIC__/assets/css/site/user/comment.css" rel="stylesheet"/>
+    <link href="__PUBLIC__/assets/css/site/common/base.css" rel="stylesheet"/>
+    <script src="__PUBLIC__/assets/js/lib/jquery/jquery-2.1.3.min.js">   </script>
+    <script src="__PUBLIC__/assets/js/site/comment.js"></script>
+    <title>评价</title>
+  </head>
+  <body>
+    <tc_include file="Public:header"/>
+    <div class="main" style="padding-bottom: 48px;">
+      <div class="container">
+        <div class="order order--bottom">
+          <div class="order__meta" style="padding-top: 40px;">
+            <div class="order__date">{$list.create_at|date='Y-m-d',###}</div>
+            <div class="order__number">订单号：{$list.create_number}</div>
+          </div>
+          <div class="order__info pannel">
+            <div class="order__img-wrap"><img class="order__img" src="__PUBLIC__/assets/img/user/nurse.png" alt=""/></div>
+            <div class="order__nurse">
+              <div class="order__nurse-wrap">
+                <div class="order__nurse-a"><span class="order__nurse-text">{$list.name}</span><span class="order__nurse-text" style="color:#fd5959;">{$list.level}星级月嫂</span></div>
+                <div class="order__nurse-b"><span class="order__nurse-text">价格：{$list.price}元/26天</span><span class="order__nurse-text">{$list.age}岁/{$list.hometown}/{$list.experience}年月嫂经验</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="comment pannel">
+          <h4 class="comment__title">请填写您宝贵的建议</h4>
+          <div class="comment__bd">
+            <div class="comment__item-wrap" id="comment__item-wrap">
+              <div class="comment__item"><strong class="comment__k"><i class="comment__icon-k">*</i>综合评分</strong>
+                <input type="hidden" class="comprehensive_score" name="comprehensive_score" value="">
+                <div class="comment__v zh" data-star-num="0">
+                  <span class="comment__star comprehensive_score" value="0"></span>
+                  <span class="comment__star comprehensive_score" value="1"></span>
+                  <span class="comment__star comprehensive_score" value="2"></span>
+                  <span class="comment__star comprehensive_score" value="3"></span>
+                  <span class="comment__star comprehensive_score" value="4"></span>
+                </div>
+              </div>
+              <div class="comment__item"><strong class="comment__k"><i class="comment__icon-k">*</i>技能评分</strong>
+                <input type="hidden" class="skill_score" name="skill_score" value="">
+                <div class="comment__v jn" data-star-num="1">
+                  <span class="comment__star skill_score" value="0"></span>
+                  <span class="comment__star skill_score" value="1"></span>
+                  <span class="comment__star skill_score" value="2"></span>
+                  <span class="comment__star skill_score" value="3"></span>
+                  <span class="comment__star skill_score" value="4"></span>
+                </div>
+              </div>
+              <div class="comment__item"><strong class="comment__k"><i class="comment__icon-k">*</i>态度评分</strong>
+                <input type="hidden" class="attitude_score" name="attitude_score" value="">
+                <div class="comment__v jn" data-star-num="1">
+                <span class="comment__star attitude_score" value="0"></span>
+                <span class="comment__star attitude_score" value="1"></span>
+                <span class="comment__star attitude_score" value="2"></span>
+                <span class="comment__star attitude_score" value="3"></span>
+                <span class="comment__star attitude_score" value="4"></span>
+              </div>
+              </div>
+            </div>
+            <textarea class="comment__input" name="" cols="30" rows="10"></textarea>
+            <div class="uploader">
+              <div class="uploader__preview"></div>
+              <input id="fileElem" type="file" accept="image/*" style="display:none;" multiple="multiple" onchange="handleFiles(this.files)"/><img class="uploader__select" id="selectElem" src="__PUBLIC__/assets/img/user/plus.png" alt=""/>
+            </div>
+            <div class="comment__input-wrap">
+              <input type="hidden" class="yuesao_id" name="yuesao_id" value="{$list.id}">
+              <input type="hidden" class="order_id" name="order_id" value="{$list.order_id}">
+              <input class="comment__submit" type="button" value="提交"/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <tc_include file="Public:footer"/>
+  </body>
+</html>
+<script>
+  $(function(){
+      $('.comprehensive_score').click(function(){
+          var comprehensive_score = $(this).attr('value');
+          $(this).parent().parent().find('input').val(comprehensive_score);
+      });
+      $('.skill_score').click(function(){
+          var skill_score = $(this).attr('value');
+          $(this).parent().parent().find('input').val(skill_score);
+      });
+      $('.attitude_score').click(function(){
+          var attitude_score = $(this).attr('value');
+          $(this).parent().parent().find('input').val(attitude_score);
+      });
+      $('.comment__submit').click(function(){
+          var yuesao_id = $('.yuesao_id').val();
+          var order_id = $('.order_id').val();
+          var comprehensive_score = $('.comprehensive_score').val();
+          var skill_score = $('.skill_score').val();
+          var attitude_score = $('.attitude_score').val();
+          $.ajax({
+              url:"{:U('User/docomment')}",
+              dataType:'JSON',
+              type:'post',
+              data:{comprehensive_score:comprehensive_score,skill_score:skill_score,attitude_score:attitude_score,yuesao_id:yuesao_id,order_id:order_id},
+              success:function(data){
+                  if(data.status > 0){
+                      alert(data.message);
+                      location.href = data.url;
+                  }else{
+                      alert(data.message);
+                      return;
+                  }
+              }
+          })
+      })
+  })
+</script>

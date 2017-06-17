@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link href="__PUBLIC__/assets/css/lib/mdl/material.min.css" rel="stylesheet"/>
+    <script src="__PUBLIC__/assets/js/lib/mdl/material.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="__PUBLIC__/assets/css/site/header.css" rel="stylesheet"/>
+    <link href="__PUBLIC__/assets/css/site/footer.css" rel="stylesheet"/>
+    <link href="__PUBLIC__/assets/css/site/user/order-detail.css" rel="stylesheet"/>
+    <link href="__PUBLIC__/assets/css/site/common/base.css" rel="stylesheet"/>
+    <title>订单详情</title>
+  </head>
+  <body>
+<tc_include file="Public:header"/>
+    <div class="main" style="padding-bottom:60px;">
+      <div class="container">
+        <div class="order order--top">
+          <div class="order__meta">
+            <div class="order__date">{$list.create_at|date='Y-m-d',###}</div>
+            <div class="order__number">订单号：143225324234234</div>
+          </div>
+          <div class="order__info pannel">
+            <div class="order__status">
+              <div class="order__title-wrap"><img class="order__icon" src="__PUBLIC__/assets/img/user/icon-warn.png" alt=""/>
+                <h5 class="order__title">订单状态：
+                  <if condition="$list['order_status'] eq 0">已关闭
+                  <elseif condition="$list['order_status'] eq 1" />未付定金
+                  <elseif condition="$list['order_status'] eq 2" />未付余款
+                  <elseif condition="$list['order_status'] eq 3" />未评价
+                  <else/>交易成功</if>
+                </h5>
+              </div>
+              <div class="order__action-wrap"><a class="order__action order__action--ok" href="{:U('User/pay',array('id'=>$list['order_id']))}">立即支付</a><a class="order__action order__action--cancel" href="{:U('User/cancel',array('id'=>$list['order_id']))}" onclick="javascript:return confirm('您确定要取消此订单吗？')">取消订单</a></div>
+            </div>
+            <div class="order__customer">
+              <div class="order__customer-wrap">
+                <div class="order__text-row"><span class="order__text-k">姓名：</span><span class="order__text-v">{$list.user_name}</span></div>
+                <div class="order__text-row"><span class="order__text-k">电话：</span><span class="order__text-v">{$list.user_phone}</span></div>
+                <div class="order__text-row"><span class="order__text-k">预定时间：</span><span class="order__text-v">{$list.create_at|date='Y-m-d',###}</span></div>
+                <div class="order__text-row"><span class="order__text-k">地址：</span><span class="order__text-v">{$list.serve_address}</span></div>
+                <div class="order__text-row"><span class="order__text-k">附言：</span><span class="order__text-v">{$list.leave_message}</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="order order--bottom">
+          <div class="order__meta">
+            <div class="order__date">{$list.create_at|date='Y-m-d',###}</div>
+            <div class="order__number">订单号：143225324234234</div>
+          </div>
+          <div class="order__info pannel">
+            <div class="order__img-wrap"><img class="order__img" src="__PUBLIC__/assets/img/user/nurse.png" alt=""/></div>
+            <div class="order__nurse">
+              <div class="order__nurse-wrap">
+                <div class="order__nurse-a"><span class="order__nurse-text">{$list.yuesao_name}</span><span class="order__nurse-text" style="color:#fd5959;">{$list.level}星级月嫂</span></div>
+                <div class="order__nurse-b"><span class="order__nurse-text">价格：{$list.price}元/26天</span><span class="order__nurse-text">{$list.age}岁/{$list.address}/{$list.experience}年月嫂经验</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <tc_include file="Public:footer"/>
+  </body>
+</html>

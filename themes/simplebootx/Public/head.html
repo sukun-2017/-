@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        @media (min-width: 1200px) {
+            .container {
+                width: 1200px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="log_bgcolor">
+    <div class="container">
+        <div class="log_content1">
+            <div class="col-md-8"> <span class="pull-left log_content1_left">欢迎来到世纪母婴！</span> </div>
+            <div class="col-md-4">
+                <div class="nav pull-right log_content1_right">
+                    <if condition="!(null !== session('username'))">
+                        <a href="{:U('Login/login')}">　　登录　|　</a>
+                        <a href="{:U('Register/register')}">注册</a>
+                        <else/>
+                        <span>欢迎，{:session('username')}</span>
+                        <a href="{:U('User/profile')}">　|　个人中心　|　</a>
+                        <a href="{:U('Login/logout')}">退出登录</a>
+                    </if>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="log_content2">
+        <div class="container">
+            <div class="col-md-3 pull-left"> <img src="__PUBLIC__/assets/img/logo2.png" width="279px" height="69px" class="log_content2_img"> </div>
+            <div class="pull-right col-md-9">
+                <ul class="log_content2_nav">
+                    <li style="border:none;width:12%;text-align: right;"><a href="{:U('Index/contact')}">联系我们</a></li>
+                    <li><a href="{:U('Index/about')}">关于我们</a></li>
+                    <li><a href="{:U('Index/matching')}">智能匹配月嫂</a></li>
+                    <li><a href="{:U('Index/yuesao_show')}">月嫂展示&预约</a></li>
+                    <li style="width: 12%;"><a href="{:U('Index/index')}">首页</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(function(){
+        $('li').each(function(){
+            $(this).click(function(){
+                $(this).siblings('li').removeClass('active');  // 删除其他兄弟元素的样式
+                $(this).addClass('active');
+            })
+        })
+    })
+</script>

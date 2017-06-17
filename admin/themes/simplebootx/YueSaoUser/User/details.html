@@ -1,0 +1,56 @@
+<admintpl file="header" />
+<js href="__PUBLIC__/ueditor/ueditor.config.js"/>
+<js href="__PUBLIC__/ueditor/ueditor.all.js"/>
+<js href="__PUBLIC__/js/jquery.form.js"/>
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:U('User/add')}" target="_self">订单详情</a></li>
+    </ul>
+    <form method="post" class="ajax-form">
+        <input type="hidden" name="hidden" value="{$list.id}">
+        <div class="row-fluid">
+            <div class="span9">
+                <table class="table table-bordered">
+                    <tr>
+                        <th colspan="2"  rowspan="4" style="width:200px;"><img src="{$list.avatar}"></th>
+                        <th>预约月嫂：</th>
+                        <td>
+                            <input type="text" name="yuesao_name" value="{$list.name}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>订单金额：</th>
+                        <td>
+                            <input type="text" name="order_money" value="{$list['deposit'] + $list['balance']}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>订单状态：</th>
+                        <td>
+                            <input type="text" name="order_status" value="<if condition="$list['status'] eq 0">已取消订单
+                                                                          <elseif condition="$list['status'] eq 1" />未支付定金
+                                                                          <elseif condition="$list['status'] eq 2" />未付余款
+                                                                          <elseif condition="$list['status'] eq 3" />未评价
+                                                                          <else/>交易成功
+                                                                          </if>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>下单时间：</th>
+                        <td>
+                            <input type="text" name="order_create_at" value="{$list.create_at|date='Y-m-d H:i:s',###}">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="form-actions">
+            <button class="ajax-submit" type="button">确认</button>
+            <a class="btn" href="{:U('User/delete',array('id'=>$list['user_id']))}">删除</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

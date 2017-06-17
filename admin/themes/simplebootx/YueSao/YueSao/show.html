@@ -1,0 +1,136 @@
+<admintpl file="header" />
+<css href="__PUBLIC__/install/css/own.css"/>
+</head>
+<style>
+    #inform {
+        position:absolute;
+        top:25%;
+        left:24%;
+        width:60px;
+        max-height: 250px;
+        z-index: 10;
+        overflow: auto;
+        box-shadow: 0 0 10px #000;
+        display:none;
+    }
+</style>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:U('Yuesao/show')}">月嫂列表</a></li>
+        <li><a href="{:U('Yuesao/add_yuesao')}" target="_self">添加月嫂</a></li>
+    </ul>
+    <form class="form-search" method="post">
+        关键字：
+        <input type="text" class="keyword" name="keyword" style="width: 200px;" value="{:I('request.keyword')}" placeholder="姓名/手机号">
+        <input type="submit" class="btn-primary" value="搜索" />
+        <a class="btn btn-danger" href="{:U('Yuesao/show')}">清空</a>
+    </form><hr>
+    <form method="post" class="js-ajax-form" action="{:U('Yuesao/show')}">
+        <table align="right">
+            <tr>
+                <!--<th>-->
+                    <!--<input type="hidden" id="sort_list" name="hidden"/>-->
+                    <!--<input type="checkbox" name="soqqconnectlass="sort" value="level" <if condition="$data eq level">checked</if>>按星级排序-->
+                    <!--<input type="checkbox" name="soqqconnectlass="sort" value="baby_num" <if condition="$data eq baby_num">checked</if>>按照顾宝宝数量排序-->
+                    <!--<input type="submit" name="sort" value="按星级排序">-->
+                    <!--<input type="submit" name="sort" value="按照顾宝宝数量排序">-->
+                <!--</th>-->
+                <th>
+                    年龄：
+                    <select name="term" id="term" style="width: 120px;">
+                        <option value="-1" >全部</option>
+                        <!--<option value='0' <php>if(isset($age)&&$age==0)echo 'selected';</php>>20-30</option>-->
+                        <option value='0' <if condition="isset($age) && $age eq 0">selected</if>>20-30</option>
+                        <!--<option value='1' <php>if(isset($age)&&$age==1)echo 'selected';</php>>30-40</option>-->
+                        <option value='1' <if condition="isset($age) && $age eq 1">selected</if>>30-40</option>
+                        <!--<option value='2' <php>if(isset($age)&&$age==2)echo 'selected';</php>>40-50</option>-->
+                        <option value='2' <if condition="isset($age) && $age eq 2">selected</if>>40-50</option>
+                        <!--<option value='3' <php>if(isset($age)&&$age==3)echo 'selected';</php>>50-60</option>-->
+                        <option value='3' <if condition="isset($age) && $age eq 3">selected</if>>50-60</option>
+                    </select> &nbsp;&nbsp;
+                    星级：
+                    <input type="text" name="start_level" class="start_level" style="width: 120px;" autocomplete="off" value="{:I('request.start_level')}">-
+                    <input type="text" name="end_level" class="end_level" style="width: 120px;" autocomplete="off" value="{:I('request.end_level')}">
+                    照顾宝宝数量：
+                    <input type="text" name="baby_min_num" class="baby_min_num" style="width: 120px;" autocomplete="off" value="{:I('request.baby_min_num')}">-
+                    <input type="text" name="baby_max_num" class="baby_max_num" style="width: 120px;" autocomplete="off" value="{:I('request.baby_max_num')}">
+                    <input type="submit" class="btn-primary" value="筛选" />
+                    <a class="btn btn-danger" href="{:U('Yuesao/show')}">清空</a>
+                </th>
+            </tr>
+        </table>
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th align="center">ID</th>
+                <th>姓名</th>
+                <th>年龄</th>
+                <th onMouseOver="javascript:showInform();"  onMouseOut="hiddenInform(event)">等级</th>
+                <div id="inform">
+                    <ul style="list-style-type: none">
+                        <li><a href="{:U('Yuesao/show',array('map'=>'asc','data'=>'level'))}">升序</a></li>
+                        <li><a href="{:U('Yuesao/show',array('map'=>'desc','data'=>'level'))}">降序</a></li>
+                    </ul>
+                </div>
+                <th><span onMouseOver="javascript:showInform();"  onMouseOut="hiddenInform(event)">照顾宝宝数</span></th>
+                <th>缩略图</th>
+                <th>证书</th>
+                <th>简介</th>
+                <th align="center">{:L('ACTIONS')}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <php>$user_statuses=array("0"=>L('USER_STATUS_BLOCKED'),"1"=>L('USER_STATUS_ACTIVATED'),"2"=>L('USER_STATUS_UNVERIFIED'));</php>
+            <foreach name="list" item="vo">
+                <tr>
+                    <td align="center">{$vo.id}</td>
+                    <td><span action_url="{:U('Yuesao/quick_modify')}" class="quick_modify" getId="{$vo.id}" name="name" title="单击可快速修改">{$vo.name}</span></td>
+                    <td><span action_url="{:U('Yuesao/quick_modify')}" class="quick_modify" getId="{$vo.id}" name="age" title="单击可快速修改">{$vo.age}</span></td>
+                    <td><span action_url="{:U('Yuesao/quick_modify')}" class="quick_modify" getId="{$vo.id}" name="introduce" title="单击可快速修改">{$vo.level}</span></td>
+                    <td>{$vo.baby_num}</td>
+                    <td><a href="{:U('Yuesao/bigPicture',array('id'=>$vo['id']))}" target="_blank"><img src="{$vo.thumb_picture}" title="点击查看大图"></a></td>
+                    <td>
+                        <span action_url="{:U('Yuesao/quick_modify')}" class="quick_modify_option" data-value="{$vo.certificate}" name="certificate" getId="{$vo.id}" title="单击可快速修改">
+                            <if condition="$vo['certificate'] eq 0">高级母婴护理师证
+                            <elseif condition="$vo['certificate'] eq 1" />小儿推拿
+                            <elseif condition="$vo['certificate'] eq 2" />营养师
+                            <elseif condition="$vo['certificate'] eq 3" />产后康复师
+                            </if>
+                        </span>
+                    </td>
+                    <td><span action_url="{:U('Yuesao/quick_modify')}" class="quick_modify" getId="{$vo.id}" name="hobby" title="单击可快速修改">{$vo.introduce}</span></td>
+                    <td>
+                        <a href="{:U('Yuesao/edit',array('id'=>$vo['id']))}" >详细信息</a>|
+                        <a href="{:U('Yuesao/delete',array('id'=>$vo['id']))}" onclick="javascript:return confirm('确定将此记录删除?')">删除</a>
+                        <a href="{:U('Yuesao/addPicture',array('id'=>$vo['id']))}">上传照片</a>
+                    </td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+        <div class="pagination">{$page}</div>
+    </form>
+</div>
+</body>
+</html>
+<script>
+    //显示悬浮层
+    function showInform(){
+        document.getElementById("inform").style.display='block';
+        // document.getElementById("inform").css("display","block");
+    }
+    //隐藏悬浮层
+    function hiddenInform(event){
+        var informDiv = document.getElementById('inform');
+        var x=event.clientX;
+        var y=event.clientY;
+        var divx1 = informDiv.offsetLeft;
+        var divy1 = informDiv.offsetTop;
+        var divx2 = informDiv.offsetLeft + informDiv.offsetWidth;
+        var divy2 = informDiv.offsetTop + informDiv.offsetHeight;
+        if( x < divx1 || x > divx2 && y < divy1 || y > divy2){
+            document.getElementById('inform').style.display='none';
+        }
+    }
+</script>

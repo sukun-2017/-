@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>忘记密码</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="__PUBLIC__/assets/css/bootstrap.css" rel="stylesheet"/>
+    <link href="__PUBLIC__/assets/css/findcode.css" rel="stylesheet"/>
+    <link href="__PUBLIC__/assets/css/base.css" rel="stylesheet"/>
+    <script src="__PUBLIC__/assets/js/lib/jquery/jquery.min.js"></script>
+    <script src="__PUBLIC__/assets/js/login/mobilelog.js"></script>
+    <tc_include file="Public:head" />
+</head>
+<div class="log_bgcolor">
+	<div class="container">
+		<div class="main">
+			<p class="findcode_title">找回密码</p>
+            <div class="findcode_table">
+                <div class="findcode_top">
+                    <a class="findcode_top_list rborder <if condition='$cat eq 1'>active</if>"><span>1、确认账号</span></a>
+                    <a class="findcode_top_list rborder <if condition='$cat eq 2'>active</if>"><span>2、请输入验证码</span></a>
+                    <a class="findcode_top_list <if condition='$cat eq 3'>active</if>"><span>3、重新设置密码</span></a>
+                </div>
+                <div class="findcode_content">
+                    <if condition="$cat eq 2">
+                        <form class="findcode_content_form">
+                            <div class="form_list">
+                                <label>手机</label>
+                                <input type="number" name="phone" class="list_phone get_phone"/>
+                            </div>
+                            <div class="form_list">
+                                <label>验证码</label>
+                                <input type="text" name="code" class="list_code get_code"/>
+                                {:sp_verifycode_img('length=4&font_size=20&width=134&height=42&use_noise=1&use_curve=0','style="cursor: pointer;" title="点击获取"')}
+                            </div>
+                            <button class="check_phone check_code" type="button">下一步</button>
+                        </form>
+                        <elseif condition="$cat eq 3"/>
+                        <form class="findcode_content_form">
+                            <div class="form_list">
+                                <label>新密码：</label>
+                                <input type="password" name="password" class="list_phone get_password"/>
+                            </div>
+                            <div class="form_list">
+                                <label>确认密码：</label>
+                                <input type="password" name="repassword" class="list_code get_repassword"/>
+                            </div>
+                            <button class="check_phone right"><a href="javascript:;" style="color:white;">确定</a></button>
+                        </form>
+                        <elseif condition="$cat eq 1"/>
+                        <form class="findcode_content_form">
+                            <div class="form_list">
+                                <label>手机</label>
+                                <input type="number" name="phone" class="list_phone"/>
+                            </div>
+                            <div class="form_list">
+                                <input name="text" type="password" placeholder="动态密码" class="list_code"/>
+                                <span class="focus-border">
+										<i></i>
+									</span>
+                            </div>
+                            <div class="form_list get_code">获取手机动态密码</div>
+                            <button class="check_phone check_number" type="button">下一步</button>
+                        </form>
+                    </if>
+                </div>
+            </div>
+		</div>
+	</div> 
+</div>
+  
+<div class="foot" style="border-top:1px solid transparent">
+  	<div class="container">
+        <tc_include file="Public:footer" />
+	</div>
+</div>
+</div>
+</body>
+</html>
+<script>
+    $(function(){
+        $('.right').click(function(){
+            var password = $('.get_password').val();
+            var repassword = $('.get_repassword').val();
+            $.ajax({
+                url:"{:U('Index/check_password')}",
+                dataType:'JSON',
+                type:'post',
+                data:{password:password,repassword:repassword},
+                success:function(data){
+                    if(data.status > 0){
+                        location.href = data.url;
+                    }else{
+                        alert(data.message);
+                        return;
+                    }
+                }
+            })
+        });
+        $('.get_code').click(function(){
+            var phone = $('.list_phone').val();
+            $.ajax({
+                url:"{:U('Index/check_phone')}",
+                dataType:'JSON',
+                type:'post',
+                data:{phone:phone},
+                success:function(data){
+                    if(data.status > 0){
+                        location.href = data.url;
+                    }else{
+                        alert(data.message);
+                        return;
+                    }
+                }
+            })
+        });
+        $('.check_number').click(function(){
+            var code = $('.list_code').val();
+            $.ajax({
+                url:"{:U('Index/check_phonecode')}",
+                dataType:'JSON',
+                type:'post',
+                data:{code:code},
+                success:function(data){
+                    if(data.status > 0){
+                        location.href = data.url;
+                    }else{
+                        alert(data.message);
+                        return;
+                    }
+                }
+            })
+        });
+        $('.check_code').click(function(){
+            var phone = $('.get_phone').val();
+            var code = $('.get_code').val();
+            $.ajax({
+                url:"{:U('Index/check_code')}",
+                dataType:'JSON',
+                type:'post',
+                data:{phone:phone,code:code},
+                success:function(data){
+                    if(data.status > 0){
+                        location.href = data.url;
+                    }else{
+                        alert(data.message);
+                        return;
+                    }
+                }
+            })
+        })
+    })
+</script>

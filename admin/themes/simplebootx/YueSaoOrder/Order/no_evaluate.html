@@ -1,0 +1,52 @@
+<admintpl file="header" />
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:U('guestbookadmin/index')}">所有订单</a></li>
+    </ul>
+    <div class="table-actions" align="right">
+        <button action="{:U('Order/delete')}" class="btn-danger" type="button" data-subcheck="true" data-msg="{:L('DELETE_CONFIRM_MESSAGE')}">批量删除</button>
+    </div>
+    <form method="post" class="js-ajax-form" action="{:U('Order/delete')}">
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <th width="15"><input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x"></th>
+                <th width="80">订单编号</th>
+                <th width="80">创建时间</th>
+                <th width="80">顾客姓名</th>
+                <th width="80">月嫂姓名</th>
+                <th width="80">订单状态</th>
+                <th width="80">订单详情</th>
+                <th width="80">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <foreach name="list" item="vo">
+                <tr>
+                    <td><input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]" value="{$vo.id}"></td>
+                    <td>{$date.time|default=time()|date='Ymd',###}</td>
+                    <td>{$vo.create_at|date='Y-m-d',###}</td>
+                    <td>{$vo.username}</td>
+                    <td>{$vo.yuesaoname}</td>
+                    <td>
+                        <if condition="$vo['status'] eq 0">已关闭
+                            <elseif condition="$vo['status'] eq 1" />未付定金
+                            <elseif condition="$vo['status'] eq 2" />未付余款
+                            <elseif condition="$vo['status'] eq 3" />未评价
+                            <else/>交易成功</if>
+                    </td>
+                    <td><a href="{:U('Order/details',array('id'=>$vo['id']))}">订单详情</a></td>
+                    <td>
+                        <a href="{:U('Order/delete_one',array('id'=>$vo['id']))}" class="js-ajax-delete" onclick="javascript:return confirm('确定要删除此条记录吗？')">删除</a>
+                    </td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+        <div class="pagination">{$page}</div>
+    </form>
+</div>
+</body>
+</html>

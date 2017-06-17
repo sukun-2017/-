@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>月嫂展示预约</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="__PUBLIC__/assets/css/bootstrap.css" rel="stylesheet" />
+  <link href="__PUBLIC__/assets/css/showorder.css" rel="stylesheet" />
+  <link href="__PUBLIC__/assets/css/base.css" rel="stylesheet" />
+  <script src="__PUBLIC__/assets/js/swiper.min.js"></script>
+  <script src="__PUBLIC__/assets/js/lib/jquery/jquery.min.js"></script>
+</head>
+
+<body>
+<div class="log_bgcolor">
+  <tc_include file="Public:head"/>
+    <div class="container">
+      <div class="subnav">
+        <p><a href="index.html" style="color:#333;">首页</a>　＞　月嫂展示&预约</p>
+      </div>
+      <!--为您推荐-->
+      <div class="main5 clearfix">
+        <p class="main5_p1">为您推荐 ● 杭州</p>
+        <p class="main5_p2">目前，世纪母婴在杭州地区共<span>XXX</span>名月嫂可供您选择<a style="padding-left:20px;color:#ffb696;" href=""> >>查看更多</a></p>
+        <div class="main_content clearfix">
+          <foreach name="list" item="v">
+          <div class="content_list">
+            <div class="news-item"> <img src="__PUBLIC__/assets/img/1.png">
+              <div class="news_pic"> <a href="#"><img src="{$v.avatar}"></a> </div>
+              <div class="news-t1">{$v.name}</div>
+              <div class="news-t2">{$v.level}星级月嫂</div>
+              <div class="news-t3">价格：{$v.price}元/26天</div>
+              <div class="news-t4">{$v.age}岁/{$v.hometown}/{$v.experience}年月嫂经验</div>
+              <div class="news-t5">{$v.introduce}</div>
+              <a class="news-t6" href="{:U('User/yuesao_appointment',array('id'=>$v['id']))}" style="color:#ffb696">+去看看</a> </div>
+          </div>
+          </foreach>
+        </div>
+      </div>
+      <div class="evaluate">
+        <p class="evaluate_title">晒单评价</p>
+        <ul id="RunTopic" style="position:relative;">
+          <div class="r-wrapper" style="position:absolute;top:0;left:0;">
+            <foreach name="cat" item="m">
+            <li>
+              <img src="{$m.avatar}" class="RunTopic_img">
+              <div class="RunTopic_content">
+                <p class="RunTopic_content_p">{$m.name}<span>{$m.create_at}</span>{$m.phone}</p>
+                <span class="RunTopic_content_span">{$m.comment}</span>
+              </div>
+            </li>
+            </foreach>
+          </div>
+        </ul>
+      </div>
+    </div>
+  </div>
+<tc_include file="Public:footer" />
+</body>
+<script type="text/javascript">
+
+  var i = 0;
+  var $wrap = $('.r-wrapper');
+
+  var $li = $('.r-wrapper>li');
+  var timer = setInterval(function () {
+    var offset = i * 5;
+    $wrap.css('transform', 'translateY(-'+ i * 5 +'px)');
+    i++;
+
+    if ( offset >= $wrap.height() - $li.height()){
+      i = 0;
+    }
+}, 200);
+
+</script>
+
+</html>

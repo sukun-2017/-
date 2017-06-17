@@ -1,0 +1,70 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap js-check-wrap">
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="{:U('AdminPage/add')}">会员详情</a></li>
+		</ul>
+		<form action="{:U('AdminPage/add_post')}" method="post" class="form-horizontal js-ajax-forms" enctype="multipart/form-data">
+			<input type="hidden" name="post[post_type]" value="2">
+			<div class="row-fluid">
+				<div class="span9">
+					<table class="table table-bordered">
+						<tr>
+							<th width="80">头像：</th>
+							<td>
+								<img src="{$list.avatar}">
+							</td>
+						</tr>
+						<tr>
+							<th width="80">姓名：</th>
+							<td>
+								<span>{$list.name}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="80">性别：</th>
+							<td>
+								<span>{$list.sex}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="80">QQ：</th>
+							<td>
+								<span>{$list.qq}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="80">微信：</th>
+							<td>
+								<span>{$list.wechat}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="80">手机：</th>
+							<td>
+								<span>{$list.phone}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="80">预产期：</th>
+							<td>
+								<span>{$list.childbirth_date|date='Y年m月',###}</span>
+							</td>
+						</tr>
+						<tr>
+							<th width="80">服务时间：</th>
+							<td>
+								<span>{$list.serve_time|date='Y年m月',###}</span>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="form-actions">
+				<a class="btn" href="javascript:history.back(-1);">返回</a>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

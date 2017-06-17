@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>智能匹配月嫂</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="__PUBLIC__/assets/css/bootstrap.css" rel="stylesheet"/>
+<link href="__PUBLIC__/assets/css/matching.css" rel="stylesheet"/>
+<link href="__PUBLIC__/assets/css/base.css" rel="stylesheet"/>
+<script src="__PUBLIC__/assets/js/swiper.min.js"></script>
+<script src="__PUBLIC__/assets/js/lib/jquery/jquery.min.js"></script>
+<script src="__PUBLIC__/assets/js/page.js"></script>
+</head>
+
+<body>
+<div class="log_bgcolor">
+<tc_include file="Public:head"/>
+  <div class="container">
+  	<div class="subnav"><p><a href="index.html" style="color:#333;">首页</a>　＞　智能匹配月嫂</p></div>
+<!--智能匹配月嫂-->
+	  <if condition="$flag eq 1">
+  	<div class="main clearfix">
+  		<img src="__PUBLIC__/assets/img/matching/1.png" class="pull-left">
+  		<img src="__PUBLIC__/assets/img/matching/2.png" class="pull-right">
+  		<i class="clearfix"></i>
+	  <button class="pull-right button1"><a style="color: white;" href="{:U('Index/matching',array('flag'=>2))}">下一步</a></button>
+  	</div>
+<!--月嫂特点选择-->
+		  <elseif condition="$flag eq 2"/>
+  	<div class="main2 clearfix">
+  		<p class="main2_p1">1、请选择您比较在意的月嫂特点（可多选）</p>
+  		<div>
+  			<div class="main2_list">
+  				<div><img src="__PUBLIC__/assets/img/matching/3.png" width="160" height="160"><p class="main2_list_p">个人素养</p></div>
+  			</div>
+  			<div class="main2_list">
+  				<div><img src="__PUBLIC__/assets/img/matching/4.png"><p class="main2_list_p">月子餐</p></div>
+  			</div>
+  			<div class="main2_list">
+  				<div><img src="__PUBLIC__/assets/img/matching/5.png"><p class="main2_list_p">经验</p></div>
+  			</div>
+  			<div class="main2_list">
+  				<div><img src="__PUBLIC__/assets/img/matching/6.png"><p class="main2_list_p">专业</p></div>
+  			</div>
+  			<div class="main2_list">
+  				<div><img src="__PUBLIC__/assets/img/matching/7.png"><p class="main2_list_p">口碑</p></div>
+  			</div>
+  			<div class="main2_list">
+  				<div><img src="__PUBLIC__/assets/img/matching/8.png"><p class="main2_list_p">早教</p></div>
+  			</div>
+  			<div class="main2_list">
+  				<div><img src="__PUBLIC__/assets/img/matching/9.png"><p class="main2_list_p">性格</p></div>
+  			</div>
+  			<div class="main2_list">
+  				<div><img src="__PUBLIC__/assets/img/matching/10.png"><p class="main2_list_p">照顾宝宝数量</p></div>
+  			</div>
+  		</div>
+		<div class="button_div"><button class="button2"><a style="color: white;" href="{:U('Index/matching',array('flag'=>3))}">下一步</a></button></div>
+  	</div>
+<!--月嫂年龄选择-->
+		  <elseif condition="$flag eq 3"/>
+ <div class="main3 clearfix">
+  		<p class="main3_p1">2、请选择您期望的月嫂年龄（单选）</p>
+  		<div>
+  			<div class="main3_list">
+  				<div class="active"><img src="__PUBLIC__/assets/img/matching/13.png"><p class="main3_list_p">28-38</p></div>
+  			</div>
+  			<div class="main3_list">
+  				<div><img src="__PUBLIC__/assets/img/matching/11.png"><p class="main3_list_p">38-48</p></div>
+  			</div>
+  			<div class="main3_list">
+  				<div><img src="__PUBLIC__/assets/img/matching/12.png"><p class="main3_list_p">48-58</p></div>
+  			</div>
+  		</div>
+	 <div class="button_div"><button class="button2"><a style="color: white;" href="{:U('Index/matching',array('flag'=>4))}">下一步</a></button></div>
+  	</div>
+<!--预产期选择-->
+		  <elseif condition="$flag eq 4"/>
+ <div class="main4 clearfix">
+  		<p class="main4_p1">3、请选择您的预产期（单选）</p>
+  		<div>
+  			<div class="main4_list">
+  				<div class="active">宝宝已出生</div>
+  			</div>
+  			<div class="main4_list">
+  				<div>2017年5月</div>
+  			</div>
+  			<div class="main4_list">
+  				<div>2017年5月</div>
+  			</div>
+  			<div class="main4_list">
+  				<div>2017年5月</div>
+  			</div>
+  			<div class="main4_list">
+  				<div>2017年5月</div>
+  			</div>
+  			<div class="main4_list">
+  				<div>2017年5月</div>
+  			</div>
+  			<div class="main4_list">
+  				<div>2017年5月</div>
+  			</div>
+  			<div class="main4_list">
+  				<div>2017年5月</div>
+  			</div>
+  		</div>
+	 <div class="button_div"><button class="button2 filter"><a style="color: white;" href="{:U('Index/matching',array('flag'=>5))}">筛选</a></button></div>
+  	</div>
+	  </if>
+	  <input type="hidden" class="hobby" value="">
+	  <input type="hidden" class="age" value="">
+	  <input type="hidden" class="childbirth_date" value="">
+<!--为您推荐-->
+ <div class="main5 clearfix">
+  		<p class="main5_p1">为您推荐 ● 杭州</p>
+  		<p class="main5_p2">根据您的选择，为您智能匹配了<span>XXX</span>位月嫂</p>
+  		<div class="main_content clearfix">
+			<foreach name="list" item="v">
+  			<div class="content_list">
+  				<div class="news-item">
+  						<img src="__PUBLIC__/assets/img/1.png">
+  						<div class="news_pic">
+  							<a href=""><img src="{$v.avatar}"></a>
+  						</div>
+  						<div class="news-t1">{$v.name}</div>
+  						<div class="news-t2">{$v.level}星级月嫂</div>
+  						<div class="news-t3">价格：{$v.price}元/26天</div>
+  						<div class="news-t4">{$v.age}岁/{$v.hometown}/{$v.experience}年月嫂经验</div>
+  						<div class="news-t5">{$v.introduce}</div>
+  						<a class="news-t6" href="{:U('User/yuesao_details',array('id'=>$v['id']))}" style="color:#ffb696">+去看看</a>
+  				</div>	
+  			</div>
+			</foreach>
+  		</div>
+  	</div>
+  	 <ul class="page clearfix" id="page"></ul>
+  </div>
+</div>
+<tc_include file="Public:footer"/>
+</body>
+</html>
+<script type="text/javascript">
+	var value = '';
+	$('.main2_list').click(function(){  //点击后选中,再点击取消选中
+	    if($(this).children().attr('class') == 'active'){
+            $(this).children().removeClass('active');
+		}else{
+            $(this).children().addClass('active');
+            value += $(this).children().find('p').html()+',';
+		}
+		$('.hobby').attr("value",value);
+	});
+
+    $('.main3_list').click(function(){  //点击后选中,再点击取消选中
+        if($(this).children().attr('class') != 'active'){
+            $(this).children().addClass('active');
+            $(this).siblings().children().removeClass('active');
+            var age = $(this).children().find('p').html();
+        }
+        $('.age').attr("value",age);
+    });
+
+    $('.main4_list').click(function(){  //点击后选中,再点击取消选中
+        if($(this).children().attr('class') != 'active'){
+            $(this).children().addClass('active');
+            $(this).siblings().children().removeClass('active');
+            var childbirth_date = $(this).find('div').html();
+        }
+        $('.childbirth_date').attr("value",childbirth_date);
+    });
+    $('.filter').click(function(){
+        var hobby = $('.hobby').val();
+        var age = $('.age').val();
+        var childbirth_date = $('.childbirth_date').val();
+        alert(hobby);
+        alert(age);
+        alert(childbirth_date);
+	});
+
+
+	var datas=[
+    {"did":1},
+	{"did":2},
+	{"did":3},
+	{"did":4},	
+	{"did":5},	
+	{"did":6},		
+];
+
+var options={
+	"id":"page",//显示页码的元素
+	"data":datas,//显示数据
+    "maxshowpageitem":3,//最多显示的页码个数
+    "pagelistcount":2,//每页显示数据个数
+    "callBack":function(result){
+    	     var cHtml="";
+        for(var i=0;i<result.length;i++){
+            cHtml+="<li>"+ result[i].name+"</li>";//处理数据
+        }
+        $("#demoContent").html(cHtml);//将数据增加到页面中
+    }
+};
+   page.init(datas.length,1,options);
+</script>

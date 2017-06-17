@@ -1,0 +1,68 @@
+<admintpl file="header" />
+</head>
+<body>
+<div class="wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="{:U('User/show')}">用户列表</a></li>
+    </ul>
+
+    <form class="form-search" method="post" action="{:U('User/show')}">
+        关键字：
+        <input type="text" class="keyword" name="keyword" style="width: 200px;" value="{:I('request.keyword')}" placeholder="姓名/手机号">
+        <input type="submit" class="btn-search" value="搜索" />
+        <a class="btn btn-danger" href="{:U('User/show')}">清空</a>
+    </form>
+    <hr/>
+        <form class="form-filter" method="post" action="{:U('User/show')}">
+           <table align="right">
+            <tr>
+                <td>
+                    预产期：
+                    <input type="text" name="start_childbirth_date" id="start_childbirth_date" class="js-datetime" value="{$formget.start_time|default=''}" style="width: 120px;" autocomplete="off">-
+                </td>
+                <td>
+
+                    <input type="text" name="end_childbirth_date" id="end_childbirth_date" class="js-datetime" value="{$formget.end_time|default=''}" style="width: 120px;" autocomplete="off"> &nbsp; &nbsp;
+
+                </td>
+                <td>  <input type="submit" class="btn-filter" value="筛选" />
+                    <a class="btn btn-danger" href="{:U('User/show')}">清空</a>
+                </td>
+            </tr>
+           </table>
+        </form>
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th align="center">ID</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>预产期</th>
+                <th>服务时间</th>
+                <th align="center">{:L('ACTIONS')}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <foreach name="list" item="vo">
+                <tr>
+                    <td align="center">{$vo.id}</td>
+                    <td>{$vo.name}</td>
+                    <td>{$vo.sex}</td>
+                    <td>{$vo.childbirth_date|date='Y年m月',###}</td>
+                    <td>{$vo.serve_time|date='Y年m月',###}</td>
+                    <td>
+                        <a href="{:U('User/details',array('id'=>$vo['id']))}" class="order_details">订单详情</a>|
+                        <a href="{:U('User/member',array('id'=>$vo['id']))}">用户详情</a>
+                    </td>
+                </tr>
+            </foreach>
+            </tbody>
+        </table>
+        <div class="pagination">
+            {$page}
+        </div>
+
+</div>
+</body>
+<script src="__PUBLIC__/js/common.js"></script>
+</html>

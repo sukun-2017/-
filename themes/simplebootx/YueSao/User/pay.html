@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>支付</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="__PUBLIC__/assets/css/bootstrap.css" rel="stylesheet"/>
+<link href="__PUBLIC__/assets/css/pay.css" rel="stylesheet"/>
+<link href="__PUBLIC__/assets/css/base.css" rel="stylesheet"/>
+<script src="__PUBLIC__/assets/js/lib/jquery/jquery.min.js"></script>
+</head>
+
+<body>
+<div class="log_bgcolor">
+<tc_include file="Public:head"/>
+ <div class="log_bgcolor">
+  <div class="container">
+		<div class="oder_toplist">
+			<span>{$list.create_at|date='Y-m-d',###}</span>
+			<span class="pd_left">订单号：{$list.create_number}</span>
+		</div>
+		<div class="oder_content">
+			<div class="oder_line"></div>
+			<img src="__PUBLIC__/assets/img/pay/1.png" class="oder_head">
+			<ul class="oder_ul1">
+				<li class="oder_li1">{$list.yuesao_name}</li>
+				<li class="oder_li2">¥ {$list.price}</li>
+				<li class="oder_li3">订单详情</li>
+				<li class="oder_li4">服务时间：{$list.serve_time|date='Y-m-d',###}</li>
+			</ul>
+			<ul class="oder_ul2">
+				<li class="oder_li1">订单号：2039158</li>
+				<li class="oder_li2">预约月嫂，只需要支付10%定金~</li>
+				<li class="oder_li3">合计：¥{$list['price']*$cat}</li>
+			</ul>
+			<p class="oder_p1">选择支付方式</p>
+			<div class="oder_pay">
+                <div class="profile-form__radio-wrap">
+                  <input class="profile-form__radio" type="radio" name="payment" id="alipay"/>
+                  <label class="profile-form__radio-lbl" for="alipay"><img src="__PUBLIC__/assets/img/pay/2.png"></label>
+                  <input style="margin-left:90px;"class="profile-form__radio" type="radio" name="payment" id="wechat"/>
+                  <label class="profile-form__radio-lbl" for="wechat"><img src="__PUBLIC__/assets/img/pay/3.png"></label>
+                </div>
+			</div>
+			<div style="text-align: center;">
+				<button class="oder_button">支付</button>
+			</div>
+		</div>
+  </div>
+  </div>
+</div>
+<tc_include file="Public:footer"/>
+</body>
+</html>
