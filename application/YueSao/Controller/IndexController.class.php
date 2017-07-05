@@ -5,6 +5,8 @@ use Think\Verify;
 
 class IndexController extends HomebaseController{
 
+
+
     public function  index(){
         $user = D('ads');
         $data = $user->limit('4')->select();

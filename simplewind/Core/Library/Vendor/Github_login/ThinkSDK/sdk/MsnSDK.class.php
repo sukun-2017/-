@@ -8,27 +8,33 @@
 // +----------------------------------------------------------------------
 // | Author: 麦当苗儿 <zuojiazi.cn@gmail.com> <http://www.zjzit.cn>
 // +----------------------------------------------------------------------
-// | GithubSDK.class.php 2013-02-26
+// | MsnSDK.class.php 2013-02-27
 // +----------------------------------------------------------------------
 
-class GithubSDK extends ThinkOauth{
+class MsnSDK extends ThinkOauth{
 	/**
 	 * 获取requestCode的api接口
 	 * @var string
 	 */
-	protected $GetRequestCodeURL = 'https://github.com/login/oauth/authorize';
+	protected $GetRequestCodeURL = 'https://login.live.com/oauth20_authorize.srf';
 
 	/**
 	 * 获取access_token的api接口
 	 * @var string
 	 */
-	protected $GetAccessTokenURL = 'https://github.com/login/oauth/access_token';
+	protected $GetAccessTokenURL = 'https://login.live.com/oauth20_token.srf';
+
+	/**
+	 * 获取request_code的额外参数 URL查询字符串格式
+	 * @var srting
+	 */
+	protected $Authorize = 'scope=wl.basic wl.offline_access wl.signin wl.emails wl.photos';
 
 	/**
 	 * API根路径
 	 * @var string
 	 */
-	protected $ApiBase = 'https://api.github.com/';
+	protected $ApiBase = 'https://apis.live.net/v5.0/';
 
 	/**
 	 * 组装接口调用参数 并调用接口
@@ -38,11 +44,12 @@ class GithubSDK extends ThinkOauth{
 	 * @return json
 	 */
 	public function call($api, $param = '', $method = 'GET', $multi = false){
-		/* Github_login 调用公共参数 */
-		$params = array();
-		$header = array("Authorization: bearer {$this->Token['access_token']}");
+		/*  MSN 调用公共参数 */
+		$params = array(
+			'access_token' => $this->Token['access_token'],
+		);
 
-		$data = $this->http($this->url($api), $this->param($params, $param), $method, $header);
+		$data = $this->http($this->url($api), $this->param($params, $param), $method);
 		return json_decode($data, true);
 	}
 	
@@ -51,13 +58,13 @@ class GithubSDK extends ThinkOauth{
 	 * @param string $result 获取access_token的方法的返回值
 	 */
 	protected function parseToken($result, $extend){
-		parse_str($result, $data);
-		if($data['access_token'] && $data['token_type']){
+		$data = json_decode($result, true);
+		if($data['access_token'] && $data['token_type'] && $data['expires_in']){
 			$this->Token = $data;
 			$data['openid'] = $this->openid();
 			return $data;
 		} else
-			throw new Exception("获取 Github_login ACCESS_TOKEN出错：未知错误");
+			throw new Exception("获取 MSN ACCESS_TOKEN出错：未知错误");
 	}
 	
 	/**
@@ -67,12 +74,12 @@ class GithubSDK extends ThinkOauth{
 	public function openid(){
 		if(isset($this->Token['openid']))
 			return $this->Token['openid'];
-		
-		$data = $this->call('user');
+
+		$data = $this->call('me');
 		if(!empty($data['id']))
 			return $data['id'];
 		else
-			throw new Exception('没有获取到 Github_login 用户ID！');
+			throw new Exception('没有获取到 MSN 用户ID！');
 	}
 	
 }

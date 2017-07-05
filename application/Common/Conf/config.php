@@ -17,6 +17,13 @@ if (file_exists("data/conf/route.php")) {
     $routes = array();
 }
 
+$GITHUB_LOGIN = array(
+    "CLIENT_ID"=>"3fdb9408796555ceafb1",
+    "CLIENT_SECRET"=>"684c48bbfa38242c3f9feb5b1a74198edb7ee5a5",
+    "CALLBACK"=>"http://www.yuesao.com/index.php?g=&m=Login&a=login?",
+);
+
+
 $configs= array(
         "LOAD_EXT_FILE"=>"extend",
         'UPLOADPATH' => 'data/upload/',
@@ -94,6 +101,12 @@ $configs= array(
         	'__UPLOAD__' => __ROOT__.'/data/upload/',
         	'__STATICS__' => __ROOT__.'/statics/',
             '__WEB_ROOT__'=>__ROOT__
+
+        ),
+        'THINK_SDK_GITHUB' => array(
+            "APP_KEY"=>"fc14f46946aca8a5029f",
+            "APP_SECRET"=>"bc04e69b39c94bc814faa58d7c6c3232c814d405",
+            'CALLBACK'   => 'http://www.yuesao.com/index.php/Login/callback',
         )
 );
 

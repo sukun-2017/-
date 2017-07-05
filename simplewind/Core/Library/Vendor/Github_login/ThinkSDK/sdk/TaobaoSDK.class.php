@@ -8,28 +8,28 @@
 // +----------------------------------------------------------------------
 // | Author: 麦当苗儿 <zuojiazi.cn@gmail.com> <http://www.zjzit.cn>
 // +----------------------------------------------------------------------
-// | GithubSDK.class.php 2013-02-26
+// | TaobaoSDK.class.php 2013-03-13
 // +----------------------------------------------------------------------
 
-class GithubSDK extends ThinkOauth{
+class TaobaoSDK extends ThinkOauth{
 	/**
 	 * 获取requestCode的api接口
 	 * @var string
 	 */
-	protected $GetRequestCodeURL = 'https://github.com/login/oauth/authorize';
+	protected $GetRequestCodeURL = 'https://oauth.taobao.com/authorize';
 
 	/**
 	 * 获取access_token的api接口
 	 * @var string
 	 */
-	protected $GetAccessTokenURL = 'https://github.com/login/oauth/access_token';
+	protected $GetAccessTokenURL = 'https://oauth.taobao.com/token';
 
 	/**
 	 * API根路径
 	 * @var string
 	 */
-	protected $ApiBase = 'https://api.github.com/';
-
+	protected $ApiBase = 'https://eco.taobao.com/router/rest';
+	
 	/**
 	 * 组装接口调用参数 并调用接口
 	 * @param  string $api    微博API
@@ -37,12 +37,15 @@ class GithubSDK extends ThinkOauth{
 	 * @param  string $method HTTP请求方法 默认为GET
 	 * @return json
 	 */
-	public function call($api, $param = '', $method = 'GET', $multi = false){
-		/* Github_login 调用公共参数 */
-		$params = array();
-		$header = array("Authorization: bearer {$this->Token['access_token']}");
-
-		$data = $this->http($this->url($api), $this->param($params, $param), $method, $header);
+	public function call($api, $param = '', $method = 'GET', $multi = false){		
+		/* 淘宝网调用公共参数 */
+		$params = array(
+			'method'       => $api,
+			'access_token' => $this->Token['access_token'],
+			'format'       => 'json',
+			'v'            => '2.0',
+		);
+		$data = $this->http($this->url(''), $this->param($params, $param), $method);
 		return json_decode($data, true);
 	}
 	
@@ -51,13 +54,13 @@ class GithubSDK extends ThinkOauth{
 	 * @param string $result 获取access_token的方法的返回值
 	 */
 	protected function parseToken($result, $extend){
-		parse_str($result, $data);
-		if($data['access_token'] && $data['token_type']){
-			$this->Token = $data;
-			$data['openid'] = $this->openid();
+		$data = json_decode($result, true);
+		if($data['access_token'] && $data['expires_in'] && $data['taobao_user_id']){
+			$data['openid'] = $data['taobao_user_id'];
+			unset($data['taobao_user_id']);
 			return $data;
 		} else
-			throw new Exception("获取 Github_login ACCESS_TOKEN出错：未知错误");
+			throw new Exception("获取淘宝网ACCESS_TOKEN出错：{$data['error']}");
 	}
 	
 	/**
@@ -65,14 +68,11 @@ class GithubSDK extends ThinkOauth{
 	 * @return string
 	 */
 	public function openid(){
-		if(isset($this->Token['openid']))
-			return $this->Token['openid'];
-		
-		$data = $this->call('user');
-		if(!empty($data['id']))
-			return $data['id'];
+		$data = $this->Token;
+		if(isset($data['openid']))
+			return $data['openid'];
 		else
-			throw new Exception('没有获取到 Github_login 用户ID！');
+			throw new Exception('没有获取到淘宝网用户ID！');
 	}
 	
 }

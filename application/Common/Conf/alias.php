@@ -22,7 +22,7 @@ return array(
     
     "phpQuery" => SPAPP_PATH . 'Lib/Extend/phpQuery/phpQuery.php',
     
-    "ThinkOauth" => SPAPP_PATH . 'Lib/Extend/ThinkSDK/ThinkOauth.class.php',
+    "ThinkOauth" => SPAPP_PATH . 'Lib/Extend/Github_login/ThinkOauth.class.php',
     
     // PHPZip
     "PHPZip" => SPAPP_PATH . 'Lib/Util/phpzip.php'

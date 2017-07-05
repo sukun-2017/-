@@ -8,28 +8,28 @@
 // +----------------------------------------------------------------------
 // | Author: 麦当苗儿 <zuojiazi.cn@gmail.com> <http://www.zjzit.cn>
 // +----------------------------------------------------------------------
-// | GithubSDK.class.php 2013-02-26
+// | TencentSDK.class.php 2013-02-25
 // +----------------------------------------------------------------------
 
-class GithubSDK extends ThinkOauth{
+class TencentSDK extends ThinkOauth{
 	/**
 	 * 获取requestCode的api接口
 	 * @var string
 	 */
-	protected $GetRequestCodeURL = 'https://github.com/login/oauth/authorize';
-
+	protected $GetRequestCodeURL = 'https://open.t.qq.com/cgi-bin/oauth2/authorize';
+	
 	/**
 	 * 获取access_token的api接口
 	 * @var string
 	 */
-	protected $GetAccessTokenURL = 'https://github.com/login/oauth/access_token';
+	protected $GetAccessTokenURL = 'https://open.t.qq.com/cgi-bin/oauth2/access_token';
 
 	/**
 	 * API根路径
 	 * @var string
 	 */
-	protected $ApiBase = 'https://api.github.com/';
-
+	protected $ApiBase = 'https://open.t.qq.com/api/';
+	
 	/**
 	 * 组装接口调用参数 并调用接口
 	 * @param  string $api    微博API
@@ -38,26 +38,33 @@ class GithubSDK extends ThinkOauth{
 	 * @return json
 	 */
 	public function call($api, $param = '', $method = 'GET', $multi = false){
-		/* Github_login 调用公共参数 */
-		$params = array();
-		$header = array("Authorization: bearer {$this->Token['access_token']}");
+		/* 腾讯微博调用公共参数 */
+		$params = array(
+			'oauth_consumer_key' => $this->AppKey,
+			'access_token'       => $this->Token['access_token'],
+			'openid'             => $this->openid(),
+			'clientip'           => get_client_ip(),
+			'oauth_version'      => '2.a',
+			'scope'              => 'all',
+			'format'             => 'json'
+		);
 
-		$data = $this->http($this->url($api), $this->param($params, $param), $method, $header);
+		$vars = $this->param($params, $param);
+		$data = $this->http($this->url($api), $vars, $method, array(), $multi);
 		return json_decode($data, true);
 	}
 	
 	/**
-	 * 解析access_token方法请求后的返回值
+	 * 解析access_token方法请求后的返回值 
 	 * @param string $result 获取access_token的方法的返回值
 	 */
 	protected function parseToken($result, $extend){
 		parse_str($result, $data);
-		if($data['access_token'] && $data['token_type']){
-			$this->Token = $data;
-			$data['openid'] = $this->openid();
+		$data = array_merge($data, $extend);
+		if($data['access_token'] && $data['expires_in'] && $data['openid'])
 			return $data;
-		} else
-			throw new Exception("获取 Github_login ACCESS_TOKEN出错：未知错误");
+		else
+			throw new Exception("获取腾讯微博 ACCESS_TOKEN 出错：{$result}");
 	}
 	
 	/**
@@ -65,14 +72,10 @@ class GithubSDK extends ThinkOauth{
 	 * @return string
 	 */
 	public function openid(){
-		if(isset($this->Token['openid']))
-			return $this->Token['openid'];
-		
-		$data = $this->call('user');
-		if(!empty($data['id']))
-			return $data['id'];
+		$data = $this->Token;
+		if(isset($data['openid']))
+			return $data['openid'];
 		else
-			throw new Exception('没有获取到 Github_login 用户ID！');
+			throw new Exception('没有获取到openid！');
 	}
-	
 }

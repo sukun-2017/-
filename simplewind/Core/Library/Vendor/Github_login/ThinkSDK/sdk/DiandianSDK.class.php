@@ -6,43 +6,44 @@
 // +----------------------------------------------------------------------
 // | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
 // +----------------------------------------------------------------------
-// | Author: 麦当苗儿 <zuojiazi.cn@gmail.com> <http://www.zjzit.cn>
+// | Author: 杨维杰 <zuojiazi.cn@gmail.com> <http://www.zjzit.cn>
 // +----------------------------------------------------------------------
-// | GithubSDK.class.php 2013-02-26
+// | SinaSDK.class.php 2013-03-01
 // +----------------------------------------------------------------------
 
-class GithubSDK extends ThinkOauth{
+class DiandianSDK extends ThinkOauth{
 	/**
 	 * 获取requestCode的api接口
 	 * @var string
 	 */
-	protected $GetRequestCodeURL = 'https://github.com/login/oauth/authorize';
+	protected $GetRequestCodeURL = 'https://api.diandian.com/oauth/authorize';
 
 	/**
 	 * 获取access_token的api接口
 	 * @var string
 	 */
-	protected $GetAccessTokenURL = 'https://github.com/login/oauth/access_token';
+	protected $GetAccessTokenURL = 'https://api.diandian.com/oauth/token';
 
 	/**
 	 * API根路径
 	 * @var string
 	 */
-	protected $ApiBase = 'https://api.github.com/';
-
+	protected $ApiBase = 'https://api.diandian.com/v1/';
+	
 	/**
 	 * 组装接口调用参数 并调用接口
-	 * @param  string $api    微博API
+	 * @param  string $api    点点网API
 	 * @param  string $param  调用API的额外参数
 	 * @param  string $method HTTP请求方法 默认为GET
 	 * @return json
 	 */
-	public function call($api, $param = '', $method = 'GET', $multi = false){
-		/* Github_login 调用公共参数 */
-		$params = array();
-		$header = array("Authorization: bearer {$this->Token['access_token']}");
-
-		$data = $this->http($this->url($api), $this->param($params, $param), $method, $header);
+	public function call($api, $param = '', $method = 'GET', $multi = false){		
+		/* 点点网调用公共参数 */
+		$params = array(
+			'access_token' => $this->Token['access_token'],
+		);
+		
+		$data = $this->http($this->url($api, '.json'), $this->param($params, $param), $method);
 		return json_decode($data, true);
 	}
 	
@@ -51,13 +52,13 @@ class GithubSDK extends ThinkOauth{
 	 * @param string $result 获取access_token的方法的返回值
 	 */
 	protected function parseToken($result, $extend){
-		parse_str($result, $data);
-		if($data['access_token'] && $data['token_type']){
-			$this->Token = $data;
-			$data['openid'] = $this->openid();
+		$data = json_decode($result, true);
+		if($data['access_token'] && $data['expires_in'] && $data['token_type'] && $data['uid']){
+			$data['openid'] = $data['uid'];
+			unset($data['uid']);
 			return $data;
 		} else
-			throw new Exception("获取 Github_login ACCESS_TOKEN出错：未知错误");
+			throw new Exception("获取点点网ACCESS_TOKEN出错：{$data['error']}");
 	}
 	
 	/**
@@ -65,14 +66,10 @@ class GithubSDK extends ThinkOauth{
 	 * @return string
 	 */
 	public function openid(){
-		if(isset($this->Token['openid']))
-			return $this->Token['openid'];
-		
-		$data = $this->call('user');
-		if(!empty($data['id']))
-			return $data['id'];
+		$data = $this->Token;
+		if(isset($data['openid']))
+			return $data['openid'];
 		else
-			throw new Exception('没有获取到 Github_login 用户ID！');
+			throw new Exception('没有获取到点点网用户ID！');
 	}
-	
 }

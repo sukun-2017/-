@@ -8,27 +8,27 @@
 // +----------------------------------------------------------------------
 // | Author: 麦当苗儿 <zuojiazi.cn@gmail.com> <http://www.zjzit.cn>
 // +----------------------------------------------------------------------
-// | GithubSDK.class.php 2013-02-26
+// | RenrenSDK.class.php 2013-02-25
 // +----------------------------------------------------------------------
 
-class GithubSDK extends ThinkOauth{
+class RenrenSDK extends ThinkOauth{
 	/**
 	 * 获取requestCode的api接口
 	 * @var string
 	 */
-	protected $GetRequestCodeURL = 'https://github.com/login/oauth/authorize';
+	protected $GetRequestCodeURL = 'https://graph.renren.com/oauth/authorize';
 
 	/**
 	 * 获取access_token的api接口
 	 * @var string
 	 */
-	protected $GetAccessTokenURL = 'https://github.com/login/oauth/access_token';
+	protected $GetAccessTokenURL = 'https://graph.renren.com/oauth/token';
 
 	/**
 	 * API根路径
 	 * @var string
 	 */
-	protected $ApiBase = 'https://api.github.com/';
+	protected $ApiBase = 'http://api.renren.com/restserver.do';
 
 	/**
 	 * 组装接口调用参数 并调用接口
@@ -38,26 +38,50 @@ class GithubSDK extends ThinkOauth{
 	 * @return json
 	 */
 	public function call($api, $param = '', $method = 'GET', $multi = false){
-		/* Github_login 调用公共参数 */
-		$params = array();
-		$header = array("Authorization: bearer {$this->Token['access_token']}");
-
-		$data = $this->http($this->url($api), $this->param($params, $param), $method, $header);
+		/* 人人网调用公共参数 */
+		$params = array(
+			'access_token' => $this->Token['access_token'],
+			'v'            => '1.0',
+			'format'       => 'json',
+		);
+		
+		$data = $this->http($this->url($api), $this->param($params, $param), $method);
 		return json_decode($data, true);
 	}
 	
+	/**
+	 * 合并默认参数和额外参数
+	 * @param array $params  默认参数
+	 * @param array/string $param 额外参数
+	 * @return array:
+	 */
+	protected function param($params, $param){
+		$params = parent::param($params, $param);
+		
+		/* 签名 */
+		ksort($params);
+		$param = array();
+		foreach ($params as $key => $value){
+			$param[] = "{$key}={$value}";
+		}
+		$sign = implode('', $param).$this->AppSecret;
+		$params['sig'] = md5($sign);
+
+		return $params;
+	}
+
 	/**
 	 * 解析access_token方法请求后的返回值
 	 * @param string $result 获取access_token的方法的返回值
 	 */
 	protected function parseToken($result, $extend){
-		parse_str($result, $data);
-		if($data['access_token'] && $data['token_type']){
-			$this->Token = $data;
-			$data['openid'] = $this->openid();
+		$data = json_decode($result, true);
+		if($data['access_token'] && $data['expires_in'] && $data['refresh_token'] && $data['user']['id']){
+			$data['openid'] = $data['user']['id'];
+			unset($data['user']);
 			return $data;
 		} else
-			throw new Exception("获取 Github_login ACCESS_TOKEN出错：未知错误");
+			throw new Exception("获取人人网ACCESS_TOKEN出错：{$data['error_description']}");
 	}
 	
 	/**
@@ -65,14 +89,10 @@ class GithubSDK extends ThinkOauth{
 	 * @return string
 	 */
 	public function openid(){
-		if(isset($this->Token['openid']))
-			return $this->Token['openid'];
-		
-		$data = $this->call('user');
-		if(!empty($data['id']))
-			return $data['id'];
+		$data = $this->Token;
+		if(!empty($data['openid']))
+			return $data['openid'];
 		else
-			throw new Exception('没有获取到 Github_login 用户ID！');
+			throw new Exception('没有获取到人人网用户ID！');
 	}
-	
 }

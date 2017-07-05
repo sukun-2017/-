@@ -5,6 +5,42 @@ use Think\Verify;
 
 class LoginController extends HomebaseController{
 
+    /*第三方登录*/
+    public function callback(){
+        $code = I('get.code');
+        /*获取access_token*/
+        import('Vendor.Github_login.ThinkSDK.ThinkOauth');
+        $gitHub_token = \ThinkOauth::getInstance(Github);
+        $access_token = $gitHub_token->getAccessToken($code);
+        $api = $access_token['access_token'];
+        $data = $gitHub_token->call('user?access_token='.$api);
+        $this->otherLogin($data);
+    }
+
+    /*获取code*/
+    public function hitHub_code(){
+        import('Vendor.Github_login.ThinkSDK.ThinkOauth');
+        $gitHub_code = \ThinkOauth::getInstance('Github');
+        redirect($gitHub_code->getRequestCodeURL());
+    }
+
+    /*将第三方登录的信息保存到数据库*/
+    public function otherLogin($data){
+        $temp['name'] = $data['login'];
+
+        $user = D('user');
+        if(!($user->where("name = '$temp[name]'")->find())) {
+            if ($user->create($temp)) {
+                $user->add();
+            } else {
+                $this->error("<script>alert('登录失败！');</script>");
+                return;
+            }
+        }
+        session('username',$temp['name']);
+        $this->redirect('Index/index');
+    }
+
     /*用户名登录页面*/
     public function login(){
         if(IS_POST){
@@ -26,6 +62,7 @@ class LoginController extends HomebaseController{
         }else{
             $this->display();
         }
+
     }
 
     /*手机号登陆页面获取手机验证码*/
